@@ -1,0 +1,61 @@
+import numpy as np
+import numpy.random as rd
+import matplotlib.pyplot as plt
+
+
+# Calculations
+
+N = 10000                                                                       # Number of total samples
+
+x = [rd.uniform(-1, 1) for i in range(N) ]                                      # Uniform distribution to generate random samples in a 2 x N array
+y = [rd.uniform(-1, 1) for i in range(N) ]
+
+R = 1                                                                           # Radius of the circle
+
+inside = [[],[]]                                                                # Empty lists for separating the samples that lay inside or outside the circle
+outside = [[],[]]
+
+
+for i in range(N):                                                              # Separating the samples inside and outside the circle. Depending on whether the sample lays inside or ouside the circle (satisfies or not the inequality), its coordinates will be appended to the corresponding list.
+  if ((x[i])**2)+((y[i])**2) <= R:
+    inside[0].append(x[i])
+    inside[1].append(y[i])
+  else:
+    outside[0].append(x[i])
+    outside[1].append(y[i])
+
+
+pi = (4*len(inside[0]))/(N*(R**2))                                              # By the Monte Carlo algorithm, we know that a = nA/N (with A being the area of the square, 4) and, in this case, a = pi*(R**2)
+
+
+# Visual representation
+
+graph = plt.figure(figsize = (5,5))
+axes = graph.add_axes([1, 1, 1, 1],
+                       xlabel = "x",
+                       ylabel = "y",
+                       title = "Random samples",
+                      xlim = [-1, 1],
+                      ylim = [-1, 1])
+axes.scatter(inside[0], inside[1], color = 'blue')
+axes.scatter(outside[0], outside[1], color = 'yellow')
+plt.axvline(R)
+plt.show()
+
+print(f"The value obtained for pi is {pi}")
+
+
+# Accuracy of the value obtained for pi
+
+number_of_points = [1, 5, 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, 5000000, 10000000]
+accuracy = [0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3]
+
+graph = plt.figure(figsize = (5,5))
+axes = graph.add_axes([1, 1, 1, 1],
+                       xlabel = "Number of points",
+                       ylabel = "Number of correct significant figures",
+                       title = "Accuracy of the result",
+                      xlim = [0, 10000000],
+                      ylim = [0, 4])
+axes.scatter(number_of_points, accuracy, color = 'red')
+plt.show()
